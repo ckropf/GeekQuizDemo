@@ -38,7 +38,7 @@ namespace GeekQuiz.Controllers
         [ResponseType(typeof(TriviaAnswer))]
         public async Task<IHttpActionResult> Post(TriviaAnswer answer)
         {
-            if (!this.ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return this.BadRequest(this.ModelState);
             }

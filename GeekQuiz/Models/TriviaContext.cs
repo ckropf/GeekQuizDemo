@@ -25,7 +25,7 @@ namespace GeekQuiz.Models
         {
             //NOTE: Was getting InvalidOperationException when hitting api/trivia, the following corrected it.
             //Found at http://stackoverflow.com/questions/3372895/datacontractserializer-error-using-entity-framework-4-0-with-wcf-4-0
-            base.Configuration.ProxyCreationEnabled = false;
+            //base.Configuration.ProxyCreationEnabled = false;
         }
 
         public DbSet<TriviaQuestion> TriviaQuestions { get; set; }
