@@ -8,6 +8,8 @@ using GeekQuiz.Models;
 
 namespace GeekQuiz.Controllers
 {
+    // Controller used for returning next quiz question and for accepting an answer to a given question.
+
     [Authorize]
     public class TriviaController : ApiController
     {
@@ -19,40 +21,28 @@ namespace GeekQuiz.Controllers
         }
 
         // GET api/Trivia
+        // Returns the next question for this user
         [ResponseType(typeof(TriviaQuestion))]
         public async Task<IHttpActionResult> Get()
         {
             TriviaQuestion nextQuestion = await NextQuestionAsync(User.Identity.Name);
             if (nextQuestion == null) { return NotFound(); }
+
             return Ok(nextQuestion);
         }
 
-        // GET api/Trivia/GetAllQuestions
-        [ResponseType(typeof(System.Collections.Generic.IEnumerable<TriviaQuestion>))]
-        public async Task<IHttpActionResult> GetAllQuestions()
-        {
-            return Ok(await _db.TriviaQuestions.ToListAsync());
-        }
-
-        //GET api/Trivia/5
-        [ResponseType(typeof(TriviaQuestion))]
-        public async Task<IHttpActionResult> Get(int id)
-        {
-            TriviaQuestion returnQuestion = await _db.TriviaQuestions.Where(q => q.Id == id).FirstOrDefaultAsync();
-            if (returnQuestion == null) { return NotFound(); }
-            return Ok(returnQuestion);
-        }
-
         // POST api/trivia
+        // Accepts an answer for a specific question
         [ResponseType(typeof(TriviaAnswer))]
         public async Task<IHttpActionResult> Post(TriviaAnswer answer)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-
             answer.UserId = User.Identity.Name;
+
             return Ok(await StoreAsync(answer));
         }
 
+        // Retrieves the next question for this user
         private async Task<TriviaQuestion> NextQuestionAsync(string userId)
         {
             var lastQuestionId = await _db.TriviaAnswers
@@ -64,17 +54,19 @@ namespace GeekQuiz.Controllers
                 .FirstOrDefaultAsync();
 
             var questionsCount = await _db.TriviaQuestions.CountAsync();
-
             var nextQuestionId = (lastQuestionId % questionsCount) + 1;
+
             return await _db.TriviaQuestions.FindAsync(CancellationToken.None, nextQuestionId);
         }
 
+        // Saves the answer chosen by the user for a specific question, and returns whether or not the provided answer is correct
         private async Task<bool> StoreAsync(TriviaAnswer answer)
         {
             _db.TriviaAnswers.Add(answer);
             await _db.SaveChangesAsync();
 
             var selectedOption = await _db.TriviaOptions.FirstOrDefaultAsync(o => o.Id == answer.OptionId && o.QuestionId == answer.QuestionId);
+
             return selectedOption.IsCorrect;
         }
     }
