@@ -17,7 +17,7 @@
             $scope.title = "loading question...";
             $scope.options = [];
 
-            $http.get("/api/trivia").success(function (data, status, headers, config) {
+            $http.get("api/trivia").success(function (data, status, headers, config) {
                 $scope.options = data.options;
                 $scope.title = data.title;
                 $scope.answered = false;
@@ -32,7 +32,7 @@
             $scope.working = true;
             $scope.answered = true;
 
-            $http.post('/api/trivia', { 'questionId': option.questionId, 'optionId': option.id }).success(function (data, status, headers, config) {
+            $http.post('api/trivia/post', { 'questionId': option.questionId, 'optionId': option.id }).success(function (data, status, headers, config) {
                 $scope.correctAnswer = data;
                 //NOTE: I'm not sure why, but I had to change the line above from the original: $scope.correctAnswer = (data === "true");
                 //In the demo app it is working, but here $scope.correctAnswer would always be set to false because data was coming back as boolean, not string,

@@ -30,6 +30,12 @@ namespace GeekQuiz
                 routeTemplate: "api/{controller}/{action}",
                 defaults: new { action = "Get" }
             );
+
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
         }
     }
 }
