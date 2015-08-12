@@ -1,34 +1,38 @@
-﻿@model IEnumerable<GeekQuiz.Models.TriviaQuestion>
-
-@{
+﻿@{
     ViewBag.Title = "All questions";
+    ViewBag.Message = "/Home/AllQuestions - API rendered view (rendered in client after API call)";
 }
 
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
 <p>
+    @Html.ActionLink("To MVC rendered view", "Index", "TriviaQuestions")
+    <br />
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+<div id="bodyContainer" ng-app="QuizApp">
+    <div ng-controller="QuizQuestions" ng-init="getQuestions()">
+        <table class="table">
+            <tr>
+                <th>
+                    Title
+                </th>
+            </tr>
+            <tr ng-repeat="question in questions">
+                <td ng-cloak>{{ question.title }}</td>
+                <td>
+                    <a ng-href="~/TriviaQuestions/Edit/{{ question.id }}">Edit</a> |
+                    <a ng-href="~/TriviaQuestions/Details/{{ question.id }}">Details</a> |
+                    <a ng-href="~/TriviaQuestions/Delete/{{ question.id }}">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Scripts/angular.js")
+    @Scripts.Render("~/Scripts/app/quiz-controller.js")
 }
-
-</table>

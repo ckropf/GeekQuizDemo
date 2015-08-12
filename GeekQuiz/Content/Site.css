@@ -65,3 +65,7 @@ div.incorrect p {
 .flip-container div.front.flip, .flip-container div.back {
     display: none;
 }
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}

@@ -45,4 +45,15 @@
                 $scope.working = false;
             });
         };
+    })
+    .controller('QuizQuestions', function ($scope, $http) {
+        $scope.questions = [];
+
+        $scope.getQuestions = function () {
+            $http.get("../api/TriviaQuestionsApi/GetTriviaQuestions").success(function (data, status, headers, config) {
+                $scope.questions = data;
+            }).error(function (data, status, headers, config) {
+                alert('Oops... something went wrong');
+            });
+        };
     });

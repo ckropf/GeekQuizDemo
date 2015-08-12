@@ -2,11 +2,15 @@
 
 @{
     ViewBag.Title = "Manage questions";
+    ViewBag.Message = "/TriviaQuestions/Index - MVC rendered view (rendered by MVC, CRUD scaffolding)";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
 
 <p>
+    @Html.ActionLink("To API rendered view", "AllQuestions", "Home")
+    <br />
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
@@ -29,5 +33,4 @@
         </td>
     </tr>
 }
-
 </table>
