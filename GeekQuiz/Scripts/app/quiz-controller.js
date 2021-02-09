@@ -32,17 +32,15 @@
             $scope.working = true;
             $scope.answered = true;
 
-            $http.post('api/trivia/post', { 'questionId': option.questionId, 'optionId': option.id }).success(function (data, status, headers, config) {
-                $scope.correctAnswer = data;
-                //NOTE: I'm not sure why, but I had to change the line above from the original: $scope.correctAnswer = (data === "true");
-                //In the demo app it is working, but here $scope.correctAnswer would always be set to false because data was coming back as boolean, not string,
-                //so (data === "true") would evaluate to false, because data == true, not "true". However, in apparently the EXACT SAME CONDITIONS, the demo
-                //app would work fine. I spent too much time trying to figure it out and failed anyway...
+            $http.post('api/trivia/post', { 'questionId': option.questionId, 'optionId': option.id })
+                .success(function (data, status, headers, config) {
+                    $scope.correctAnswer = data;
+                    $scope.working = false;
+                })
 
-                $scope.working = false;
-            }).error(function (data, status, headers, config) {
-                $scope.title = "Oops... something went wrong";
-                $scope.working = false;
+                .error(function (data, status, headers, config) {
+                    $scope.title = "Oops... something went wrong";
+                    $scope.working = false;
             });
         };
     })
@@ -50,10 +48,13 @@
         $scope.questions = [];
 
         $scope.getQuestions = function () {
-            $http.get("../api/TriviaQuestionsApi/GetTriviaQuestions").success(function (data, status, headers, config) {
-                $scope.questions = data;
-            }).error(function (data, status, headers, config) {
-                alert('Oops... something went wrong');
+            $http.get("../api/TriviaQuestionsApi/GetTriviaQuestions")
+                .success(function (data, status, headers, config) {
+                    $scope.questions = data;
+                })
+
+                .error(function (data, status, headers, config) {
+                    alert('Oops... something went wrong');
             });
         };
     });
